@@ -79,7 +79,7 @@ For Lidar:
 ![lidar](media/highway--NIS_laser.png)
 
 For Radar:
-![radar](media/highway--NIS Radar.png)
+![radar](media/highway--NIS_Radar.png)
 
 ### Additional Work:
 * Create a generic kalman filter library that is easily intgerated to any project.
