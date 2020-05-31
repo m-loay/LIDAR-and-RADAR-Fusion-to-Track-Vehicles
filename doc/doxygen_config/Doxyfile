@@ -1,0 +1,239 @@
+# MAIN SETTINGS
+# The only mandatory configurations is the PROJECT_NAME
+# You might also want to add/remove patterns to FILE_PATTERNS
+# according to your project needs
+# Be careful if you have to change the values under CMake variables
+# (those surrounded by @). Make sure that they are correctly set
+# by CMake or by your own build script.
+#
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "KF"
+OUTPUT_DIRECTORY       = ../KF_LLD
+HTML_EXTRA_STYLESHEET  = ./custom.css
+PLANTUML_JAR_PATH      = ./
+USE_MDFILE_AS_MAINPAGE = ./PrjMainPage.md
+INPUT                  = ./
+INPUT                  += ./groups.dox
+@INCLUDE               = ./Doxyfile_include.in
+FILE_PATTERNS          = *.h
+FILE_PATTERNS         += *.c
+FILE_PATTERNS         += *.cpp
+FILE_PATTERNS         += *.md
+#
+# END OF MAIN SETTINGS
+
+# GENERAL CONFIGURATION
+# The lines below contain most of the configuration variables used by Doxygen.
+# Many of them were used to tune the tool for Detailed Design purposes.
+# Only modify something if you are sure of what you are doing.
+#
+ABBREVIATE_BRIEF = "The $name class" \
+                   "The $name widget" \
+                   "The $name file" \
+                   is \
+                   provides \
+                   specifies \
+                   contains \
+                   represents \
+                   a \
+                   an \
+                   the
+ALLEXTERNALS           = NO
+ALLOW_UNICODE_NAMES    = NO
+ALPHABETICAL_INDEX     = YES
+ALWAYS_DETAILED_SEC    = YES
+AUTOLINK_SUPPORT       = YES
+BINARY_TOC             = NO
+BRIEF_MEMBER_DESC      = YES
+BUILTIN_STL_SUPPORT    = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+CASE_SENSE_NAMES       = NO
+CLANG_ASSISTED_PARSING = NO
+CLANG_COMPILATION_DATABASE_PATH = 0
+CLASS_DIAGRAMS         = NO
+CLASS_GRAPH            = NO
+COLLABORATION_GRAPH    = YES
+COLS_IN_ALPHA_INDEX    = 5
+COMPACT_LATEX          = NO
+COMPACT_RTF            = NO
+CPP_CLI_SUPPORT        = NO
+CREATE_SUBDIRS         = NO
+DIRECTORY_GRAPH        = NO
+DISABLE_INDEX          = NO
+DISTRIBUTE_GROUP_DOC   = NO
+DOCBOOK_OUTPUT         = docbook
+DOCBOOK_PROGRAMLISTING = NO
+DOCSET_BUNDLE_ID       = org.doxygen.Project
+DOCSET_FEEDNAME        = "Doxygen generated docs"
+DOCSET_PUBLISHER_ID    = org.doxygen.Publisher
+DOCSET_PUBLISHER_NAME  = Publisher
+DOT_CLEANUP            = YES
+DOT_FONTNAME           = Helvetica
+DOT_FONTSIZE           = 10
+DOT_GRAPH_MAX_NODES    = 100
+DOT_IMAGE_FORMAT       = png
+DOT_MULTI_TARGETS      = NO
+DOT_NUM_THREADS        = 0
+DOT_TRANSPARENT        = NO
+ECLIPSE_DOC_ID         = org.doxygen.Project
+ENABLE_PREPROCESSING   = YES
+ENUM_VALUES_PER_LINE   = 4
+EXAMPLE_PATTERNS       = *
+EXAMPLE_RECURSIVE      = NO
+EXCLUDE_SYMLINKS       = NO
+EXPAND_ONLY_PREDEF     = NO
+EXT_LINKS_IN_WINDOW    = NO
+EXTERNAL_GROUPS        = YES
+EXTERNAL_PAGES         = YES
+EXTERNAL_SEARCH        = NO
+EXTRACT_ALL            = YES
+EXTRACT_ANON_NSPACES   = NO
+EXTRACT_LOCAL_CLASSES  = NO
+EXTRACT_LOCAL_METHODS  = NO
+EXTRACT_PACKAGE        = NO
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+FILTER_SOURCE_FILES    = NO
+FORCE_LOCAL_INCLUDES   = NO
+FORMULA_FONTSIZE       = 10
+FORMULA_TRANSPARENT    = YES
+FULL_PATH_NAMES        = NO
+GENERATE_AUTOGEN_DEF   = NO
+GENERATE_BUGLIST       = YES
+GENERATE_CHI           = NO
+GENERATE_DEPRECATEDLIST= YES
+GENERATE_DOCBOOK       = NO
+GENERATE_DOCSET        = NO
+GENERATE_ECLIPSEHELP   = NO
+GENERATE_HTML          = YES
+GENERATE_HTMLHELP      = NO
+GENERATE_LATEX         = NO
+GENERATE_LEGEND        = YES
+GENERATE_MAN           = NO
+GENERATE_PERLMOD       = NO
+GENERATE_QHP           = NO
+GENERATE_RTF           = NO
+GENERATE_TESTLIST      = NO
+GENERATE_TODOLIST      = YES
+GENERATE_TREEVIEW      = YES
+GENERATE_XML           = YES
+GRAPHICAL_HIERARCHY    = YES
+GROUP_GRAPHS           = NO
+GROUP_NESTED_COMPOUNDS = YES
+HAVE_DOT               = YES
+HIDE_COMPOUND_REFERENCE= NO
+HIDE_FRIEND_COMPOUNDS  = NO
+HIDE_IN_BODY_DOCS      = YES
+HIDE_SCOPE_NAMES       = NO
+HIDE_UNDOC_CLASSES     = NO
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_RELATIONS   = YES
+HTML_COLORSTYLE_GAMMA  = 80
+HTML_COLORSTYLE_HUE    = 220
+HTML_COLORSTYLE_SAT    = 100
+HTML_DYNAMIC_MENUS     = YES
+HTML_DYNAMIC_SECTIONS  = NO
+HTML_FILE_EXTENSION    = .html
+HTML_INDEX_NUM_ENTRIES = 100
+HTML_OUTPUT            = html
+HTML_TIMESTAMP         = YES
+IDL_PROPERTY_SUPPORT   = YES
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
+INHERIT_DOCS           = YES
+INLINE_GROUPED_CLASSES = YES
+INLINE_INFO            = YES
+INLINE_INHERITED_MEMB  = NO
+INLINE_SIMPLE_STRUCTS  = YES
+INLINE_SOURCES         = NO
+INPUT_ENCODING         = UTF-8
+INTERACTIVE_SVG        = NO
+INTERNAL_DOCS          = YES
+JAVADOC_AUTOBRIEF      = NO
+LATEX_BATCHMODE        = NO
+LATEX_BIB_STYLE        = plain
+LATEX_CMD_NAME         = latex
+LATEX_HIDE_INDICES     = NO
+LATEX_OUTPUT           = latex
+LATEX_SOURCE_CODE      = NO
+LATEX_TIMESTAMP        = NO
+LOOKUP_CACHE_SIZE      = 0
+MACRO_EXPANSION        = NO
+MAKEINDEX_CMD_NAME     = makeindex
+MAN_EXTENSION          = .3
+MAN_LINKS              = NO
+MAN_OUTPUT             = man
+MARKDOWN_SUPPORT       = YES
+MATHJAX_FORMAT         = HTML-CSS
+MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
+MAX_DOT_GRAPH_DEPTH    = 1
+MAX_INITIALIZER_LINES  = 30
+MULTILINE_CPP_IS_BRIEF = NO
+OPTIMIZE_FOR_FORTRAN   = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_JAVA   = NO
+OPTIMIZE_OUTPUT_VHDL   = NO
+OUTPUT_LANGUAGE        = English
+PAPER_TYPE             = a4
+PDF_HYPERLINKS         = YES
+PERL_PATH              = /usr/bin/perl
+PERLMOD_LATEX          = NO
+PERLMOD_PRETTY         = YES
+QHP_NAMESPACE          = org.doxygen.Project
+QHP_VIRTUAL_FOLDER     = doc
+QT_AUTOBRIEF           = NO
+QUIET                  = YES
+RECURSIVE              = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_LINK_SOURCE = NO
+REFERENCES_RELATION    = NO
+REPEAT_BRIEF           = YES
+RTF_HYPERLINKS         = NO
+RTF_OUTPUT             = rtf
+RTF_SOURCE_CODE        = NO
+SEARCH_INCLUDES        = NO
+SEARCHDATA_FILE        = searchdata.xml
+SEARCHENGINE           = YES
+SEPARATE_MEMBER_PAGES  = NO
+SERVER_BASED_SEARCH    = NO
+SHORT_NAMES            = NO
+SHOW_FILES             = YES
+SHOW_GROUPED_MEMB_INC  = NO
+SHOW_INCLUDE_FILES     = NO
+SHOW_NAMESPACES        = YES
+SHOW_USED_FILES        = YES
+SIP_SUPPORT            = NO
+SKIP_FUNCTION_MACROS   = YES
+SORT_BRIEF_DOCS        = YES
+SORT_BY_SCOPE_NAME     = YES
+SORT_GROUP_NAMES       = YES
+SORT_MEMBER_DOCS       = YES
+SORT_MEMBERS_CTORS_1ST = YES
+SOURCE_BROWSER         = YES
+SOURCE_TOOLTIPS        = YES
+STRICT_PROTO_MATCHING  = NO
+STRIP_CODE_COMMENTS    = YES
+SUBGROUPING            = YES
+TAB_SIZE               = 4
+TEMPLATE_RELATIONS     = YES
+TOC_EXPAND             = NO
+TOC_INCLUDE_HEADINGS   = 0
+TREEVIEW_WIDTH         = 250
+TYPEDEF_HIDES_STRUCT   = NO
+UML_LIMIT_NUM_FIELDS   = 50
+UML_LOOK               = YES
+USE_HTAGS              = NO
+USE_MATHJAX            = NO
+USE_PDFLATEX           = YES
+VERBATIM_HEADERS       = NO
+WARN_AS_ERROR          = NO
+WARN_FORMAT            = "$file:$line: $text"
+WARN_IF_DOC_ERROR      = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_NO_PARAMDOC       = YES
+WARNINGS               = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = NO
+#
+# END OF GENERAL CONFIGURATION

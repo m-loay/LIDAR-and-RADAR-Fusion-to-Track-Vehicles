@@ -1,0 +1,54 @@
+#
+# This file contains the paths to directories where to find the project
+# headers, sources, Mardown (.md) and Dox (.dox) files (INPUT variable).
+#
+# This is a file to be copied by CMake (or by your own build script) to
+# the build/ directory. The variable  is to be substituted
+# by the actual path in the file system.
+#
+# Please remember that Doxygen will only parse files that correspond
+# to the patterns defined in Doxyfile under the variable FILE_PATTERNS.
+# If you don't want that a directory is searched by Doxygen but you
+# do need that a specific file in that directory be included, just add
+# the path to the file directly.
+#
+# Project's global includes and sources
+# You enter here paths to directories where you have headers and sources
+# that are not part of a component, e.g., headers defined in the architecture
+# level.
+
+
+#
+# Component XXXX
+# For each component in your project, you have to add the specific paths
+# to be searched or to specific files to be included. The variable 
+# IMAGE_PATH should point to the directory where possible images used
+# in the Markdown file are stored. EXAMPLE_PATH is used by the \include
+# command, which can be used in the Markdown file.
+
+
+INPUT        += ../../kfheader
+INPUT        += ../../testCases
+INPUT 		 += ../../tools
+INPUT 		 += ../../highway
+
+#klaman filter library
+INPUT        += ../../kflib
+INPUT 		 += ../kf
+EXAMPLE_PATH += ../kf
+IMAGE_PATH   += ../kf
+
+#Extended klaman filter APP
+INPUT 		 += ../../kfApp
+INPUT 		 += ../kfApp
+EXAMPLE_PATH += ../kfApp
+IMAGE_PATH   += ../kfApp
+
+#Unscented klaman filter APP
+INPUT 		 += ../../ukfApp
+INPUT 		 += ../ukfApp
+EXAMPLE_PATH += ../ukfApp
+IMAGE_PATH   += ../ukfApp
+
+
+

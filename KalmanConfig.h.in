@@ -1,0 +1,6 @@
+#cmakedefine USE_SIMULATION
+#cmakedefine USE_TEST
+#cmakedefine USE_UNIT_TESTING
+#cmakedefine USE_EKF
+#cmakedefine USE_UKF
+#cmakedefine USE_HIGHWAY
