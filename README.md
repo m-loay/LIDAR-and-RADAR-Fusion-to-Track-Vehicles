@@ -75,10 +75,15 @@ and performing clustering. This is similar to what was done in Sensor Fusion Lid
 ### Accuracy
 The output RMSE px, py, vx, vy output coordinates [0.04852,0.062393,0.366935,0.400275].
 Also the NIS for both lidar and radar is consistent as shown in the following figures:
+
+
 For Lidar:
+
 ![lidar](media/highway--NIS_laser.png)
 
+
 For Radar:
+
 ![radar](media/highway--NIS_Radar.png)
 
 ### Additional Work:
