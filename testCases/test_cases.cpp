@@ -25,11 +25,15 @@
 #include <Eigen/Dense>
 #include <math.h>
 #include"test_cases.h"
+#include "kalmanFilter.h"
 
 Eigen::VectorXd PredictionModel (const Eigen::VectorXd &sig_pred_ , const void *args);
 Eigen::VectorXd calc_covar (const Eigen::VectorXd &sig_pred , const void *args);
 Eigen::VectorXd PredictionModelMeasurement (const Eigen::VectorXd &sig_pred_ , const void *args);
 Eigen::VectorXd calc_covar_measurement (const Eigen::VectorXd &sig_pred , const void *args);
+
+Eigen::VectorXd g_t1 (const KalmanData &kd, const void *p);
+Eigen::MatrixXd g_t1_prime (const KalmanData &kd, const void *p);
 
 //Test cases
 
@@ -62,22 +66,19 @@ bool linearFilter(void)
 	kd.P = Eigen::MatrixXd(n_x,n_x);
 	kd.P.fill(0.0);
 	kd.P << 1000, 0, 0, 1000;
-
-	//create state transition matrix for predicted state covariance.
-	kd.F = Eigen::MatrixXd(n_x,n_x);
-	kd.F<< 1, 1, 0, 1;
 	
 	//output matrix
-	kd.H = Eigen::MatrixXd (n_z, n_x);
-	kd.H<< 1, 0;
+	Eigen::MatrixXd H = Eigen::MatrixXd (n_z, n_x);
+	H<< 1, 0;
 
 	//Sensor Noise Covariance matrix
-	kd.R = Eigen::MatrixXd(n_z, n_z);
-	kd.R.diagonal()<<1.0;
+	Eigen::MatrixXd R = Eigen::MatrixXd(n_z, n_z);
+	R.fill(0.0);
+	R.diagonal()<<1.0;
 
 	//precoess noise covariance matrix Q
-	kd.Q = Eigen::MatrixXd (n_x, n_x);
-	kd.Q.fill(0.0);
+	Eigen::MatrixXd Q = Eigen::MatrixXd (n_x, n_x);
+	Q<< 0.0, 0.0, 0.0, 0.0;
 
   /*******************************************************************************
    *  Set correct Answer                                                         *
@@ -127,12 +128,19 @@ bool linearFilter(void)
 	KfUpdate *kfUpdate = new KfUpdateLinear();
 	for (unsigned int n = 0; n < measurement_pack_list.size(); ++n)
 	{
-		// //perform update step
-		kd.zpred = kd.H * kd.x;
-		kfUpdate->update(kd,measurement_pack_list[n]);
+		// Calculate Innovation
+		Eigen::VectorXd zpred = H * kd.x;
+		Eigen::VectorXd z_meas = measurement_pack_list[n].raw_measurements_;
+		Eigen::VectorXd Y = z_meas - zpred;
 
-		//perform predict step
-		kfPred->predict(kd);
+		//Calculate Kalman Gain
+		Eigen::MatrixXd K = kalmanFilter::CalculateKalmanGain(kd,H,R);
+
+		//perform Update step
+		kalmanFilter::update(kd,Y,H,K);
+
+		//perform Predict step
+		kalmanFilter::predict(kd,kd.Q,g_t1,g_t1_prime,NULL);
 
 		// //collect result
 		x_rest_list.push_back(kd.x);
@@ -1557,6 +1565,21 @@ Eigen::VectorXd calc_covar_measurement (const Eigen::VectorXd &sig_pred , const 
 	while (x_diff(1) < -M_PI)
 		x_diff(1) += 2.0 * M_PI;
 	return x_diff;
+}
+Eigen::VectorXd g_t1 (const KalmanData &kd, const void *p)
+{
+	//create state transition matrix for predicted state covariance.
+	Eigen::MatrixXd F = Eigen::MatrixXd(2,2);
+	F<< 1, 1, 0, 1;
+	return F* kd.x;
+
+}
+Eigen::MatrixXd g_t1_prime (const KalmanData &kd, const void *p)
+{
+	//create state transition matrix for predicted state covariance.
+	Eigen::MatrixXd F = Eigen::MatrixXd(2,2);
+	F<< 1, 1, 0, 1;
+	return F;
 }
 /**
  *  @}
