@@ -60,6 +60,7 @@ public:
   Eigen::MatrixXd Q;	// process covariance matrix
   Eigen::VectorXd zpred;	// prediction of measurement model
   double NIS;
+  float dt;
   int m_numState;
   int m_numMeasurements;
   int m_numAddedAug;
