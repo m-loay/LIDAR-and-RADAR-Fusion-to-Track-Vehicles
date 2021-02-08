@@ -28,8 +28,11 @@ public:
      * @brief predict
      * Perform the Prediction step in kalman filter.
      *
-     * @param[in,out] kd 
-     * is kalman data object  {KalmanData}.
+     * @param[in,out] x 
+     * The mean of stat vector  {VectorXd &}.
+     * 
+     * @param[in,out] P
+     * The mean of stat vector  {VectorXd &}.
      * 
      * @param[in] Q 
      * the process noise matrix  {MatrixXd}.
@@ -39,39 +42,48 @@ public:
      * 
      * @param[in] g_prime 
      * calculates the mean state vector based dynamic model{function}.
+     * 
+     * @param[in] p_args
+     *  Extra arguments {const void *}.
      *
      */
-    static void predict(KalmanData &kd,
-                        const Eigen::MatrixXd &Q,
-                        std::function<Eigen::VectorXd(KalmanData &)>g,
-                        std::function<Eigen::MatrixXd(KalmanData &)>g_prime)
+    static void predict(Eigen::VectorXd & x,
+                        Eigen::MatrixXd & P,
+                        const Eigen::Ref<const Eigen::MatrixXd> &Q,
+                        std::function<Eigen::VectorXd(const Eigen::Ref<const Eigen::VectorXd> &, const void *)>g,
+                        std::function<Eigen::MatrixXd(const Eigen::Ref<const Eigen::VectorXd> &, const void *)>g_prime,
+                        const void *p_args = NULL)
     {
-        kd.x = g(kd);
-        Eigen::MatrixXd G = g_prime(kd);
-        kd.P = (G* kd.P * G.transpose()) + Q;
+        
+        x = g(x, p_args);
+        Eigen::MatrixXd G = g_prime(x, p_args);
+        P = (G* P * G.transpose()) + Q;
     }
 
     /**
      * @brief CalculateKalmanGain
      * It calculates kalman gain.
      *
-     * @param[in,out] kd 
-     * is kalman data object  {KalmanData}.
+     * @param[in] P
+     * The mean of stat vector  {VectorXd &}.
      * 
      * @param[in] H 
      * the measurement matrix  {MatrixXd}.
      * 
      * @param[in] R 
      * the noise covariance measurement matrix  {MatrixXd}.
+     * 
+     * @return K 
+     * the kalman gain matrix  {MatrixXd}.
      *
      */
-    static Eigen::MatrixXd CalculateKalmanGain(KalmanData &kd,
-                                            const Eigen::MatrixXd &H,
-                                            const Eigen::MatrixXd &R)
+    static Eigen::MatrixXd CalculateKalmanGain(const Eigen::Ref<const Eigen::MatrixXd> &P,
+                                               const Eigen::Ref<const Eigen::MatrixXd> &H,
+                                               const Eigen::Ref<const Eigen::MatrixXd> &R)
     {
         Eigen::MatrixXd Ht = H.transpose();
-        Eigen::MatrixXd S = (H * kd.P * Ht) + R;
-        Eigen::MatrixXd K = kd.P *Ht * S.inverse();
+        Eigen::MatrixXd S = (H * P * Ht) + R;
+        Eigen::MatrixXd K = P *Ht * S.inverse();
         return K;
     }
 
@@ -79,8 +91,11 @@ public:
      * @brief update
      * Perform the update step.
      *
-     * @param[in,out] kd 
-     * is kalman data object  {KalmanData}.
+     * @param[in,out] x 
+     * The mean of stat vector  {VectorXd &}.
+     * 
+     * @param[in,out] P
+     * The mean of stat vector  {VectorXd &}.
      * 
      * @param[in] Y 
      * the innovation vector  {VectorXd}.
@@ -92,14 +107,15 @@ public:
      * the kalman gain matrix  {MatrixXd}.
      *
      */
-    static void update(KalmanData &kd,
-                       const Eigen::VectorXd &Y,
-                       const Eigen::MatrixXd &H,
-                       const Eigen::MatrixXd &K)
+    static void update(Eigen::VectorXd & x,
+                       Eigen::MatrixXd & P,
+                       const Eigen::Ref<const Eigen::VectorXd> &Y,
+                       const Eigen::Ref<const Eigen::MatrixXd> &H,
+                       const Eigen::Ref<const Eigen::MatrixXd> &K)
     {
-        kd.x = kd.x + (K * Y);
-        Eigen::MatrixXd I = Eigen::MatrixXd::Identity(kd.x.size(), kd.x.size());
-        kd.P = (I - K * H) * kd.P;
+        x = x + (K * Y);
+        Eigen::MatrixXd I = Eigen::MatrixXd::Identity(x.size(), x.size());
+        P = (I - K * H) * P;
     }
 
 };

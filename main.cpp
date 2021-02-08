@@ -94,11 +94,11 @@ int main(int argc, char* argv[])
       // 2.output the measurements
     if (tools.measurement_pack_list[k].sensor_type_ == MeasurementPackage::LASER)
     {
-      tools.nis_lidar.push_back(tracking.kd_.NIS);
+      tools.nis_lidar.push_back(tracking.kd_.nis);
     }
     else if (tools.measurement_pack_list[k].sensor_type_ == MeasurementPackage::RADAR)
     {
-      tools.nis_radar.push_back(tracking.kd_.NIS);
+      tools.nis_radar.push_back(tracking.kd_.nis);
     }
 
 #if defined(USE_EKF)

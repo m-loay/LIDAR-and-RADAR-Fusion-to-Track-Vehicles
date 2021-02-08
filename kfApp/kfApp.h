@@ -19,9 +19,10 @@
 #define SRC_KF_APP_H_
 #include <Eigen/Dense>
 #include <cstdint>
-#include "kf_lib.h"
-
-#if defined USE_UNIT_TESTING
+#include "KalmanConfig.h"
+#include "kalman_data.h"
+#include "measurement_package.h"
+#ifdef USE_UNIT_TESTING
 #define private public
 #endif
 
@@ -89,13 +90,13 @@ private:
     //@param x The state vector.
     //@param[in] kd an object contains all kalman data {KalmanData}.
     //@return the mean state vector.
-    static Eigen::VectorXd g_(KalmanData &kd);
+    static Eigen::VectorXd g_(const Eigen::VectorXd &mean, const void *p_args=NULL);
 
     // calculates the derivative of g_function.
     //@param x The state vector.
     //@param[in] kd an object contains all kalman data {KalmanData}.
     //@return the state transition matrix.
-    static Eigen::MatrixXd g_prime_(KalmanData &kd);
+    static Eigen::MatrixXd g_prime_(const Eigen::VectorXd &mean, const void *p_args=NULL);
 
     // calculates the mean state vector for measurements based on sensor model.
     //@param x The state vector.

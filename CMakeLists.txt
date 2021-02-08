@@ -12,11 +12,11 @@ set(UKFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/ukfApp)
 set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/testCases)
 
 # Use simulation  testing mode or Unit testing
-option (USE_TEST "Use Test Mode" OFF )
+option (USE_TEST "Use Test Mode" ON )
 option (USE_UNIT_TESTING "Use Unit testing Mode" OFF)
 option (USE_EKF "Use Extnded Kalman Filter APP" OFF)  
-option (USE_UKF "Use Unscented Kalman Filter" OFF) 
-option (USE_HIGHWAY "Use High way Mode" ON)       
+option (USE_UKF "Use Unscented Kalman Filter" ON) 
+option (USE_HIGHWAY "Use High way Mode" OFF)       
 
 #find the pacakges required for eigen and save directory
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
@@ -24,7 +24,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 list(APPEND EXTRA_LIBS Eigen3::Eigen)
 
 if(USE_HIGHWAY)
-    find_package(PCL 1.2 REQUIRED)
+    find_package(PCL 1.10.1 REQUIRED)
     include_directories(${PCL_INCLUDE_DIRS})
     link_directories(${PCL_LIBRARY_DIRS})
     add_definitions(${PCL_DEFINITIONS})
@@ -64,8 +64,6 @@ if(USE_HIGHWAY)
     list(APPEND EXTRA_INCLUDES "${TOOLS_INCLIDE_DIR}")
 
     #Add Kalman Filter library sub-directory
-    add_subdirectory(${KFLIB_INCLIDE_DIR})
-    list(APPEND EXTRA_LIBS kflib)
 	list(APPEND EXTRA_INCLUDES "${KFLIB_INCLIDE_DIR}")
 	
 	#Add Plotter sub-directory
@@ -101,8 +99,6 @@ elseif (USE_TEST)
     list(APPEND EXTRA_INCLUDES "${TOOLS_INCLIDE_DIR}")
 
     #Add Kalman Filter library sub-directory
-    add_subdirectory(${KFLIB_INCLIDE_DIR})
-    list(APPEND EXTRA_LIBS kflib)
 	list(APPEND EXTRA_INCLUDES "${KFLIB_INCLIDE_DIR}")
 	
 	#Add Plotter sub-directory
@@ -136,8 +132,6 @@ elseif(USE_UNIT_TESTING)
 	list(APPEND EXTRA_INCLUDES "${KFAPP_INCLIDE_DIR}")
 
 	#Add Kalman Filter sub-directory
-	add_subdirectory(${KFLIB_INCLIDE_DIR})
-	list(APPEND EXTRA_LIBS kflib)
 	list(APPEND EXTRA_INCLUDES "${KFLIB_INCLIDE_DIR}")
 
 	#Add Tools sub-directory
@@ -148,7 +142,7 @@ elseif(USE_UNIT_TESTING)
 	#compile the source code and link it with external libraries
 	add_executable(gtest main_test.cpp)
 	target_include_directories(gtest PUBLIC ${EXTRA_INCLUDES})
-	target_link_libraries (gtest ${GTEST_BOTH_LIBRARIES} pthread ${EXTRA_LIBS} Eigen3::Eigen)
+	target_link_libraries (gtest ${GTEST_BOTH_LIBRARIES} ${EXTRA_LIBS} Eigen3::Eigen)
 	add_test(NAME gtest COMMAND gtest)
 endif()
 

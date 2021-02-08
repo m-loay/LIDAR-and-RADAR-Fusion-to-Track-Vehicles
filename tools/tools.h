@@ -54,6 +54,7 @@ class Tools
 	std::vector<Eigen::VectorXd> estimations;
 	std::vector<double> nis_radar;
 	std::vector<double> nis_lidar;
+	std::string name;
 	/**
 	* A helper method to calculate RMSE.
 	*/

@@ -163,8 +163,7 @@ void kfApp::Prediction(const double dt)
      *    2. Perform the predict step
      *********************************************************************/
     //set kalman paramters for prediction step
-    kd_.dt = dt;
-    kalmanFilter::predict(kd_, Q, g_, g_prime_);
+    kalmanFilter::predict(kd_.x, kd_.P, Q, g_, g_prime_, &dt);
 }
 
 /**
@@ -198,16 +197,18 @@ void kfApp::UpdateLidar(MeasurementPackage meas_package)
      *********************************************************************/
     Eigen::VectorXd zpred = H * kd_.x;
     Eigen::VectorXd Y = meas_package.raw_measurements_ - zpred;
+    Eigen::MatrixXd S = (H * kd_.P * H.transpose()) + R;
+    kd_.nis = Y.transpose() * S.inverse() * Y;
 
     /**********************************************************************
      *    Calculate Kalman Gain
      *********************************************************************/
-    Eigen::MatrixXd K = kalmanFilter::CalculateKalmanGain(kd_,H,R);
+    Eigen::MatrixXd K = kalmanFilter::CalculateKalmanGain(kd_.P, H, R);
 
     /**********************************************************************
      *    Update Linear
      *********************************************************************/
-    kalmanFilter::update(kd_,Y,H,K);
+    kalmanFilter::update(kd_.x, kd_.P, Y, H, K);
 }
 
 /**
@@ -242,39 +243,45 @@ void kfApp::UpdateRadar(MeasurementPackage meas_package)
     Eigen::VectorXd zpred = h_(kd_.x ,measSize);
     Eigen::VectorXd Y = meas_package.raw_measurements_ - zpred;
     Y = Innovationhelper(Y);
+    Eigen::MatrixXd S = (H * kd_.P * H.transpose()) + R;
+    kd_.nis = Y.transpose() * S.inverse() * Y;
 
     /**********************************************************************
      *    Calculate Kalman Gain
      *********************************************************************/
-    Eigen::MatrixXd K = kalmanFilter::CalculateKalmanGain(kd_,H,R);
+    Eigen::MatrixXd K = kalmanFilter::CalculateKalmanGain(kd_.P, H, R);
 
     /**********************************************************************
      *    Update Linear
      *********************************************************************/
-    kalmanFilter::update(kd_,Y,H,K);
+    kalmanFilter::update(kd_.x, kd_.P, Y, H, K);
 }
 
 /**
  * @brief g Function 
  *  which calculates the mean state vector based dynamic model.
  *
- * @param[in] kd 
- *  an object contains all kalman data {KalmanData}.
+ * @param[in] mean
+ *  the state vector {VectorXd&}.
+ * 
+ * @param[in] p_args
+ *  Extra arguments {const void *}.
  * 
  * @return F.x
  *  the mean state vector {{VectorXd}}.
  */
-Eigen::VectorXd kfApp::g_(KalmanData &kd)
+Eigen::VectorXd kfApp::g_(const Eigen::VectorXd &mean, const void *p_args)
 {
     //create state transition matrix for predicted state covariance.
-    Eigen::MatrixXd F = Eigen::MatrixXd::Identity(kd.m_numState, kd.m_numState);
+    Eigen::MatrixXd F = Eigen::MatrixXd::Identity(mean.rows(), mean.rows());
+    double dt = *(double*)p_args;
     F << 1, 0, 1, 0,
          0, 1, 0, 1,
          0, 0, 1, 0,
          0, 0, 0, 1;
-    F(0, 2) = kd.dt;
-    F(1, 3) = kd.dt;
-    return F* kd.x;
+    F(0, 2) = dt;
+    F(1, 3) = dt;
+    return F* mean;
 }
 
 /**
@@ -282,22 +289,26 @@ Eigen::VectorXd kfApp::g_(KalmanData &kd)
  *  In linear case it shall return the state transition Matrix.
  *  In non-linear it shall return the jacobians. 
  *
- * @param[in] kd 
- *  an object contains all kalman data {KalmanData}.
+ * @param[in] mean
+ *  the state vector {VectorXd&}.
+ * 
+ * @param[in] p_args
+ *  Extra arguments {const void *}.
  * 
  * @return F 
  *  the state transition matrix {MatrixXd}.
  */
-Eigen::MatrixXd kfApp::g_prime_ (KalmanData &kd)
+Eigen::MatrixXd kfApp::g_prime_ (const Eigen::VectorXd &mean, const void *p_args)
 {
     //create state transition matrix for predicted state covariance.
-    Eigen::MatrixXd F = Eigen::MatrixXd::Identity(kd.m_numState, kd.m_numState);
+    Eigen::MatrixXd F = Eigen::MatrixXd::Identity(mean.rows(), mean.rows());
+    double dt = *(double*)p_args;
     F << 1, 0, 1, 0,
          0, 1, 0, 1,
          0, 0, 1, 0,
          0, 0, 0, 1;
-    F(0, 2) = kd.dt;
-    F(1, 3) = kd.dt;
+    F(0, 2) = dt;
+    F(1, 3) = dt;
     return F;
 }
 
@@ -341,7 +352,7 @@ Eigen::VectorXd kfApp:: h_(const Eigen::VectorXd &x , size_t size)
  *  In non-linear it shall return the jacobians.
  * 
  * @param[in]  x_state
- *  The Kalman filter state matrix {VectorXd&}.
+ *  The state vector {VectorXd&}.
  *
  *  @return   Hj 
  *  the state transition matrix of measurements{MatrixXd}.

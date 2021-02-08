@@ -121,13 +121,14 @@ Eigen::VectorXd Tools::CalculateRMSE(const std::vector<Eigen::VectorXd> &estimat
  *        then plot the data using gnuplot library.
  *
  */
-void Tools::plotData(std::string opName)
+void Tools::plotData(std::string type)
 {
    /*******************************************************************************
    *  extract data from (Estimations,gt,measurement)                              *
    *******************************************************************************/
   //
-  int N = ground_truth.size();
+  std::string opName = type+"_"+name;
+  int N =  ground_truth.size();;
   // create variables for plotting
   std::vector<double> x(N),y(N),vx(N),vy(N),x_meas(N),y_meas(N),x_gt(N),y_gt(N)
                      ,vx_gt(N),vy_gt(N),v(N),v_gt(N),time(N);
@@ -272,6 +273,7 @@ void Tools::plotData(std::string opName)
 	plt.print(opName+"--"+"NIS Radar");
 	plt.exec();
 	std::cout<<"finish plot" <<std::endl;
+
 }
 
 /**
@@ -347,8 +349,12 @@ void Tools::readData(int argc, char* argv[])
   check_arguments(argc, argv);
 
   std::string in_file_name_ = argv[1];
-//   std::string in_file_name_ = "../data/sample-laser-radar-measurement-data-1.txt";
   std::ifstream in_file_(in_file_name_.c_str(), std::ifstream::in);
+  std::size_t found = in_file_name_.find_last_of("/\\");
+  std::size_t found2 = in_file_name_.find_last_of(".");
+
+  name = in_file_name_.substr(found+1, (found2 - found - 1));
+
 
   check_files(in_file_, in_file_name_);
 
@@ -386,8 +392,8 @@ void Tools::readData(int argc, char* argv[])
     }
     else if (sensor_type.compare("R") == 0)
     {
-      // radar measurement
-      // read measurements at this timestamp
+    //   radar measurement
+    //   read measurements at this timestamp
 
       meas_package.sensor_type_ = MeasurementPackage::RADAR;
       meas_package.raw_measurements_ = Eigen::VectorXd(3);

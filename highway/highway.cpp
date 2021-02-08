@@ -243,7 +243,7 @@ lmarker Highway::lidarSense(Car& car, pcl::visualization::PCLVisualizer::Ptr& vi
 	xy_position.push_back(meas_package);
 
     car.ukf.ProcessMeasurement(meas_package);
-	nis.push_back(car.ukf.kd_.NIS);
+	nis.push_back(car.ukf.kd_.nis);
 
     return marker;
 }
@@ -289,7 +289,7 @@ rmarker Highway::radarSense(Car& car, Car ego, pcl::visualization::PCLVisualizer
 	xy_position.push_back(meas_package);
 
     car.ukf.ProcessMeasurement(meas_package);
-	nis.push_back(car.ukf.kd_.NIS);
+	nis.push_back(car.ukf.kd_.nis);
 
     return marker;
 }
