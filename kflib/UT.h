@@ -375,7 +375,7 @@ public:
 
             if(xfun != NULL)
             {
-                // x_diff = xfun(x_diff);
+                x_diff = xfun(x_diff);
             }
             else
             {
