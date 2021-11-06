@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(KalmanFilter)
 # Set Paths
 set(KCONFIG_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/_generated)
@@ -12,8 +12,8 @@ set(UKFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/ukfApp)
 set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/testCases)
 
 # Use simulation  testing mode or Unit testing
-option (USE_TEST "Use Test Mode" ON )
-option (USE_UNIT_TESTING "Use Unit testing Mode" OFF)
+option (USE_TEST "Use Test Mode" OFF )
+option (USE_UNIT_TESTING "Use Unit testing Mode" ON)
 option (USE_EKF "Use Extnded Kalman Filter APP" OFF)  
 option (USE_UKF "Use Unscented Kalman Filter" ON) 
 option (USE_HIGHWAY "Use High way Mode" OFF)       

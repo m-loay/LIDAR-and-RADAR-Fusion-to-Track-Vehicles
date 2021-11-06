@@ -1,7 +1,7 @@
 # SFND_Unscented_Kalman_Filter
 Sensor Fusion UKF Highway Project Starter Code
 
-<img src="media/ukf_highway_tracked.gif" width="700" height="400" />
+![ukf](media/ukf_highway_tracked.gif)
 
 In this project you will implement an Unscented Kalman Filter to estimate the state of multiple cars on a highway using noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance outlined in the project rubric. 
 
@@ -17,7 +17,7 @@ Note that the programs that need to be written to accomplish the project are src
 
 The program main.cpp has already been filled out, but feel free to modify it.
 
-<img src="media/ukf_highway.png" width="700" height="400" />
+![ukf2](media/ukf_highway.png)
 
 `main.cpp` is using `highway.h` to create a straight 3 lane highway environment with 3 traffic cars and the main ego car at the center. 
 The viewer scene is centered around the ego car and the coordinate system is relative to the ego car as well. The ego car is green while the 
