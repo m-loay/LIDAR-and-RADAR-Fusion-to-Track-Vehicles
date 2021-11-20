@@ -2,15 +2,15 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(KalmanFilter)
 
 # Set Paths
-set(KCONFIG_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/_generated)
-set(KFLIB_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/kflib)
-set(HIGH_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/highway)
-set(KFH_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/kfheader)
-set(TOOLS_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/tools)
-set(PLOT_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/plotter)
-set(KFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/kfApp)
-set(UKFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/ukfApp)
-set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/testCases)
+set(KCONFIG_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/_generated)
+set(KFLIB_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/kflib)
+set(HIGH_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/highway)
+set(KFH_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/kfheader)
+set(TOOLS_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/tools)
+set(PLOT_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/plotter)
+set(KFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/kfApp)
+set(UKFAPP_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/ukfApp)
+set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/testCases)
 
 
 # Use simulation, testing or unit test and the mode
@@ -36,7 +36,7 @@ endif()
 # configure a header file to pass some of the CMake settings
 # to the source code
 make_directory("${KCONFIG_INCLIDE_DIR}/_generated")
-configure_file ("${PROJECT_SOURCE_DIR}/KalmanConfig.h.in"
+configure_file ("${PROJECT_SOURCE_DIR}/src/KalmanConfig.h.in"
                 "${KCONFIG_INCLIDE_DIR}/KalmanConfig.h")
 
 # add the binary tree to the search path for include files
@@ -70,7 +70,7 @@ if(USE_HIGHWAY)
 	list(APPEND EXTRA_INCLUDES "${PLOT_INCLIDE_DIR}")
 
     #compile the source code and link it with external libraries
-    add_executable(ukf_highway main.cpp)
+    add_executable(ukf_highway src/main.cpp)
     target_include_directories(ukf_highway PUBLIC ${EXTRA_INCLUDES})
     target_link_libraries (ukf_highway PUBLIC ${EXTRA_LIBS} ${PCL_LIBRARIES})	
 
@@ -106,7 +106,7 @@ elseif (USE_TEST)
 
 
     #compile the source code and link it with external libraries
-    add_executable(kf main.cpp)
+    add_executable(kf src/main.cpp)
     target_include_directories(kf PUBLIC ${EXTRA_INCLUDES})
     target_link_libraries (kf PUBLIC ${EXTRA_LIBS} ${PCL_LIBRARIES} plotter)
 
@@ -146,7 +146,7 @@ elseif(USE_UNIT_TESTING)
 	list(APPEND EXTRA_INCLUDES "${TOOLS_INCLIDE_DIR}")
 
 	#compile the source code and link it with external libraries
-	add_executable(gtest main_test.cpp)
+	add_executable(gtest src/main_test.cpp)
 	target_include_directories(gtest PUBLIC ${EXTRA_INCLUDES})
 	#target_link_libraries (gtest ${EXTRA_LIBS} ${GTEST_BOTH_LIBRARIES} Eigen3::Eigen)
 	target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
