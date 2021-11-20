@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.12)
 project(testCases)
 
 #set standard of C++11 and build type to debug

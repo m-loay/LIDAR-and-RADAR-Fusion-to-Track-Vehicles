@@ -39,9 +39,10 @@ Eigen::MatrixXd g_t1_prime (const Eigen::Ref<const Eigen::VectorXd>& mean, const
 
 
 /**
- * @brief Test case 1 linearFilter
- *        Test The linear update step.
- *
+ * @brief 
+ * 
+ * @return true 
+ * @return false 
  */
 bool linearFilter(void)
 {
@@ -1069,23 +1070,17 @@ bool UpdateUT(void)
 }
 
 /**
- * @brief PredictionModel used to propagate the sigma points throgh the prediction model.
+ * @brief 
  * 
- * @param[in] sig_pred_
- *  The sigma points calculated by the unscented transform {VectorXd} .
- * 
- * @param[in] p_args
- *  Extra arguments {const void *}.
- * 
- * @return  Xsig_pred 
- * The propagated sigma points{VectorXd}.
- *
+ * @param col 
+ * @param p_args 
+ * @return Eigen::VectorXd 
  */
-Eigen::VectorXd PredictionModel (const Eigen::Ref<const Eigen::VectorXd> &col,const void *p_args)
+Eigen::VectorXd PredictionModel (const Eigen::Ref<const Eigen::VectorXd> &col,const void *pArgs)
 {
     Eigen::VectorXd Xsig_pred = Eigen::VectorXd(5);
     Xsig_pred.fill(0.0);
-    double dt = *(double*)p_args;
+    double dt = *(double*)pArgs;
     // Extract values for readability
     double p_x      =col(0);
     double p_y      =col(1);

@@ -330,6 +330,7 @@ Eigen::VectorXd kfApp:: h_(const Eigen::VectorXd &x , size_t size)
     Eigen::VectorXd h_x(size);
     float rho = sqrt(x(0) * x(0) + x(1) * x(1));
 
+  
     //check division by zero
     if(fabs(rho) < 0.0001)
     {

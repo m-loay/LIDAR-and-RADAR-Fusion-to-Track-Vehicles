@@ -92,3 +92,5 @@ For Radar:
 * Generate a reprot for all test cases.
 * Document all source code using doxygen.
 
+gcovr -r . --exclude-throw-branches --html --html --html-details -o example-html-details.html
+

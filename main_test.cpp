@@ -18,62 +18,62 @@
 using namespace std;
 using namespace Eigen;
 
-TEST(KFTest,linearFilter)
+GTEST_TEST(KFTest,linearFilter)
 {
     EXPECT_EQ(linearFilter(),true);
 }
 
-TEST(KFTest,trackLinearFilter)
+GTEST_TEST(KFTest,trackLinearFilter)
 {
     EXPECT_EQ(trackLinearFilter(),true);
 }
 
-TEST(EKFTest,CalculateJacobian)
+GTEST_TEST(EKFTest,CalculateJacobian)
 {
-    EXPECT_EQ(CalculateJacobian(),true);
+    EXPECT_EQ(CalculateJacobian(), true);
 }
 
-TEST(EKFTest,trackEKF)
+GTEST_TEST(EKFTest,trackEKF)
 {
     EXPECT_EQ(trackEKF(),true);
 }
 
-TEST(RMSE,calculateRMSE)
+GTEST_TEST(RMSE,calculateRMSE)
 {
     EXPECT_EQ(calculateRMSE(),true);
 }
 
-TEST(UTTEST,CalculateSigmaPoints)
+GTEST_TEST(UTTEST,CalculateSigmaPoints)
 {
     EXPECT_EQ(CalculateSigmaPointsNoAugmentation(),true);
 }
 
-TEST(UTTEST,CalculateSigmaPointsAug)
+GTEST_TEST(UTTEST,CalculateSigmaPointsAug)
 {
     EXPECT_EQ(CalculateSigmaPointsWithAugmentation(),true);
 }
 
-TEST(UTTEST,CalculateSigmaPointsAugPred)
+GTEST_TEST(UTTEST,CalculateSigmaPointsAugPred)
 {
     EXPECT_EQ(CalculateSigmaPointsAugPred(),true);
 }
 
-TEST(UTTEST,CalculateSigmaPointsMeanCovar)
+GTEST_TEST(UTTEST,CalculateSigmaPointsMeanCovar)
 {
     EXPECT_EQ(CalculateSigmaPointsMeanCovar(),true);
 }
 
-TEST(UTTEST,PredictUT)
+GTEST_TEST(UTTEST,PredictUT)
 {
     EXPECT_EQ(PredictUT(),true);
 }
 
-TEST(UTTEST,CalculateMeasurementsMeanCovar)
+GTEST_TEST(UTTEST,CalculateMeasurementsMeanCovar)
 {
     EXPECT_EQ(CalculateMeasurementsMeanCovar(),true);
 }
 
-TEST(UTTEST,UpdateUT)
+GTEST_TEST(UTTEST,UpdateUT)
 {
     EXPECT_EQ(UpdateUT(),true);
 }
