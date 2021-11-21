@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(KalmanFilter)
-
+add_definitions(-std=c++11)
+set(CMAKE_BUILD_TYPE Debug)
 # Set Paths
 set(KCONFIG_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/_generated)
 set(KFLIB_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/kflib)
@@ -16,8 +17,8 @@ set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/testCases)
 # Use simulation, testing or unit test and the mode
 option (USE_TEST "Use Test Mode" ON )
 option (USE_UNIT_TESTING "Use Unit testing Mode" OFF)
-option (USE_EKF "Use Extnded Kalman Filter APP" ON)  
-option (USE_UKF "Use Unscented Kalman Filter" OFF) 
+option (USE_EKF "Use Extnded Kalman Filter APP" OFF)
+option (USE_UKF "Use Unscented Kalman Filter" ON)
 option (USE_HIGHWAY "Use High way Mode" OFF)       
 
 #find the pacakges required for eigen and save directory
@@ -118,14 +119,19 @@ elseif(USE_UNIT_TESTING)
 
 	#set build type to debug and C++ standard to 11 for coverage
 	set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-    add_definitions(-fprofile-arcs -ftest-coverage)
+	add_definitions(-fprofile-arcs -ftest-coverage)
 	set(GCOV_LINK_FLAGS "-lgcov --coverage")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g --coverage -fprofile-arcs -ftest-coverage")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCOV_LINK_FLAGS}")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g --coverage -fprofile-arcs -ftest-coverage")
+
+	# Create OBJECT_DIR variable
+	set(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/gtest.dir/src)
+	message("-- Object files will be output to: ${OBJECT_DIR}")
 
 	#Find Gtest lib and include the directories
 	find_package(GTest REQUIRED)
 	include_directories(${GTEST_INCLUDE_DIRS})
+
 
 	#Add Testcases sub-directory
 	add_subdirectory(${TEST_CASES_INCLIDE_DIR})
@@ -148,29 +154,27 @@ elseif(USE_UNIT_TESTING)
 	#compile the source code and link it with external libraries
 	add_executable(gtest src/main_test.cpp)
 	target_include_directories(gtest PUBLIC ${EXTRA_INCLUDES})
-	#target_link_libraries (gtest ${EXTRA_LIBS} ${GTEST_BOTH_LIBRARIES} Eigen3::Eigen)
-	target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
-
-    #add the testing
-    add_test(NAME gtest COMMAND gtest)
+	target_link_libraries (gtest ${EXTRA_LIBS} ${GTEST_BOTH_LIBRARIES} Eigen3::Eigen)
+	#target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
 
 	# Create the gcov target. Run coverage tests with 'make gcov'
+	# Create the gcov target. Run coverage tests with 'make gcov'
 	add_custom_target(gcov
-	COMMAND mkdir -p gcoverage
-	COMMAND ${CMAKE_MAKE_PROGRAM} test
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+			COMMAND mkdir -p gcoverage
+			COMMAND ${CMAKE_MAKE_PROGRAM} test
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
 	add_custom_command(TARGET gcov
-	COMMAND echo "=================== GCOV ===================="
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/src/*.cpp -o ${OBJECT_DIR}
-	COMMAND echo "-- Source diretorie: ${CMAKE_SOURCE_DIR}/src/"
-	COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage)
+			COMMAND echo "=================== GCOV ===================="
+			COMMAND gcov -b ${CMAKE_SOURCE_DIR}/src/*.cpp -o ${OBJECT_DIR}
+			COMMAND echo "-- Source diretorie: ${CMAKE_SOURCE_DIR}/src/"
+			COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage)
 	add_dependencies(gcov gtest)
 
 	add_test(output_test ${CMAKE_CURRENT_BINARY_DIR}/gtest)
 	#target_link_libraries(gtest PUBLIC ${GTEST_BOTH_LIBRARIES} ${EXTRA_LIBS})
-	target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
+	#target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
 
 endif()
 
