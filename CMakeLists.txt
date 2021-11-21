@@ -154,23 +154,22 @@ elseif(USE_UNIT_TESTING)
 	#compile the source code and link it with external libraries
 	add_executable(gtest src/main_test.cpp)
 	target_include_directories(gtest PUBLIC ${EXTRA_INCLUDES})
-	target_link_libraries (gtest ${EXTRA_LIBS} ${GTEST_BOTH_LIBRARIES} Eigen3::Eigen)
-	#target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
-
-	# Create the gcov target. Run coverage tests with 'make gcov'
+	#target_link_libraries (gtest ${EXTRA_LIBS} ${GTEST_BOTH_LIBRARIES} Eigen3::Eigen)
+	
 	# Create the gcov target. Run coverage tests with 'make gcov'
 	add_custom_target(gcov
-			COMMAND mkdir -p gcoverage
-			COMMAND ${CMAKE_MAKE_PROGRAM} test
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-
+	COMMAND mkdir -p gcoverage
+	COMMAND ${CMAKE_MAKE_PROGRAM} test
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+	
 	add_custom_command(TARGET gcov
-			COMMAND echo "=================== GCOV ===================="
-			COMMAND gcov -b ${CMAKE_SOURCE_DIR}/src/*.cpp -o ${OBJECT_DIR}
-			COMMAND echo "-- Source diretorie: ${CMAKE_SOURCE_DIR}/src/"
-			COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage)
+	COMMAND echo "=================== GCOV ===================="
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/src/*.cpp -o ${OBJECT_DIR}
+	COMMAND echo "-- Source diretorie: ${CMAKE_SOURCE_DIR}/src/"
+	COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage)
 	add_dependencies(gcov gtest)
+	target_link_libraries (gtest PUBLIC ${EXTRA_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread Eigen3::Eigen)
 
 	add_test(output_test ${CMAKE_CURRENT_BINARY_DIR}/gtest)
 	#target_link_libraries(gtest PUBLIC ${GTEST_BOTH_LIBRARIES} ${EXTRA_LIBS})
