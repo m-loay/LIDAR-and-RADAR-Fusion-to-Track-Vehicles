@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(KalmanFilter)
-add_definitions(-std=c++11)
+add_definitions(-std=c++14)
 set(CMAKE_BUILD_TYPE Debug)
 # Set Paths
 set(KCONFIG_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/_generated)
@@ -15,11 +15,11 @@ set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/testCases)
 
 
 # Use simulation, testing or unit test and the mode
-option (USE_TEST "Use Test Mode" ON )
+option (USE_TEST "Use Test Mode" OFF )
 option (USE_UNIT_TESTING "Use Unit testing Mode" OFF)
 option (USE_EKF "Use Extnded Kalman Filter APP" OFF)
 option (USE_UKF "Use Unscented Kalman Filter" ON)
-option (USE_HIGHWAY "Use High way Mode" OFF)       
+option (USE_HIGHWAY "Use High way Mode" ON)
 
 #find the pacakges required for eigen and save directory
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
