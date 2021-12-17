@@ -42,22 +42,24 @@ public:
                                                 const Eigen::Ref<const Eigen::MatrixXd> &covariance)
     {
         //extract sizes
-        const int numState = mean.size();
-        const int m_numSigmaPoints = 2*numState +1;
-        const int lambda = 3 - numState;
+        const int numState(mean.rows());
+        const int m_numSigmaPoints(2*numState +1);
+        const double lambda(static_cast<double>(3 - numState));
 
         //create sigma points
-        Eigen::MatrixXd sigmaPoints = Eigen::MatrixXd(numState,m_numSigmaPoints);
+        Eigen::MatrixXd sigmaPoints(Eigen::MatrixXd(numState,m_numSigmaPoints));
 
         // create square root matrix
-        Eigen::MatrixXd L = covariance.llt().matrixL();
+        Eigen::MatrixXd L(covariance.llt().matrixL());
+
+        const auto coeff(sqrt(lambda+numState));
 
         // create augmented sigma points
         sigmaPoints.col(0)  = mean;
-        for (int i = 0; i< numState; ++i) 
+        for (int i = 0; i< numState; ++i)
         {
-            sigmaPoints.col(i+1)           = mean + sqrt(lambda+numState) * L.col(i);
-            sigmaPoints.col(i+1+numState) = mean - sqrt(lambda+numState) * L.col(i);
+            sigmaPoints.col(i+1)           = mean + coeff * L.col(i);
+            sigmaPoints.col(i+1+numState)  = mean - coeff * L.col(i);
         }
         return sigmaPoints;
     }
@@ -84,11 +86,11 @@ public:
                                                 const Eigen::Ref<const Eigen::MatrixXd> &Q)
     {
         //extract sizes
-        const int numState = mean.size();
-        const int numAugState = numState + Q.rows();
-        const int numSigmaPoints = 2*numAugState +1;
-        const int lambda = 3 - numAugState;
-        const int diff = numAugState - numState;
+        const int numState(mean.rows());
+        const int numAugState(numState + Q.rows());
+        const int numSigmaPoints(2*numAugState +1);
+        const double lambda(static_cast<double>(3 - numAugState));
+        const int diff(numAugState - numState);
 
         // create augmented mean vector
         Eigen::VectorXd x_aug = Eigen::VectorXd(numAugState);
@@ -105,14 +107,16 @@ public:
         Eigen::MatrixXd sigmaPoints = Eigen::MatrixXd(numAugState, numSigmaPoints);
 
         // create square root matrix
-        Eigen::MatrixXd L = P_aug.llt().matrixL();
+        Eigen::MatrixXd L(P_aug.llt().matrixL());
+
+        const auto coeff(std::sqrt(lambda + numAugState));
 
         // create augmented sigma points
         sigmaPoints.col(0)  = x_aug;
-        for (int i = 0; i< numAugState; ++i) 
+        for (int i = 0; i< numAugState; ++i)
         {
-            sigmaPoints.col(i+1)             = x_aug + sqrt(lambda + numAugState) * L.col(i);
-            sigmaPoints.col(i+1+numAugState) = x_aug - sqrt(lambda + numAugState) * L.col(i);
+            sigmaPoints.col(i+1)             = x_aug + coeff * L.col(i);
+            sigmaPoints.col(i+1+numAugState) = x_aug - coeff * L.col(i);
         }
         return sigmaPoints;
     }
@@ -140,18 +144,18 @@ public:
      * the predicted sigma points {MatrixXd}.
      *
      */
-    static Eigen::MatrixXd PredictSigmaPoints(const Eigen::Ref<const Eigen::MatrixXd> &sigmaPoints, 
+    static Eigen::MatrixXd PredictSigmaPoints(const Eigen::Ref<const Eigen::MatrixXd> &sigmaPoints,
                                               std::function<Eigen::VectorXd(const Eigen::Ref<const Eigen::VectorXd> &,const void *)>model,
                                               const void *p_args = NULL,
                                               const int na_aug = 0)
     {
         //extract sizes
-        const int numSigmaPoints = sigmaPoints.cols();
-        const int numState = sigmaPoints.rows() - na_aug;
-        const int colSize = sigmaPoints.rows();
+        const int numSigmaPoints(sigmaPoints.cols());
+        const int numState(sigmaPoints.rows() - na_aug);
+        const int colSize(sigmaPoints.rows());
 
         //create predicted sigma points matrix
-        Eigen::MatrixXd predictedSigmaPoints = Eigen::MatrixXd(numState, numSigmaPoints);
+        Eigen::MatrixXd predictedSigmaPoints(Eigen::MatrixXd(numState, numSigmaPoints));
 
         //create column vector to get sigma point col.
         Eigen::VectorXd col(colSize);
@@ -182,7 +186,7 @@ public:
     static Eigen::VectorXd CalculateWeigts(const int numSigmaPoints,
                                            const int numAug = 0)
     {
-        const int lambda = 3 - numAug;
+        const double lambda(static_cast<double>(3 - numAug));
         Eigen::VectorXd weights = Eigen::VectorXd(numSigmaPoints);
         weights.fill(1.0 / static_cast<double>(2.0 * static_cast<double>(lambda + numAug)));
         weights(0) = static_cast<double>(lambda) /static_cast<double>(lambda + numAug);
@@ -207,8 +211,8 @@ public:
                                        const Eigen::Ref<const Eigen::VectorXd> &weights)
     {
         //extract sizes
-        const int numSigmaPoints = predictedSigmaPoints.cols();
-        const int numState = predictedSigmaPoints.rows();
+        const int numSigmaPoints(predictedSigmaPoints.cols());
+        const int numState(predictedSigmaPoints.rows());
 
         //Initialize mean matrix
         Eigen::VectorXd mean = Eigen::VectorXd(numState);
@@ -245,16 +249,16 @@ public:
                                              std::function<Eigen::VectorXd(const Eigen::VectorXd&)>helperFunc = NULL)
     {
         //extract sizes
-        const int numSigmaPoints = predictedSigmaPoints.cols();
-        const int numState = predictedSigmaPoints.rows();
+        const int numSigmaPoints(predictedSigmaPoints.cols());
+        const int numState(predictedSigmaPoints.rows());
 
         //Initialize covariance matrix
-        Eigen::MatrixXd covariance = Eigen::MatrixXd(numState,numState);
+        Eigen::MatrixXd covariance(Eigen::MatrixXd(numState,numState));
         covariance.fill(0.0);
-        
+
         // state difference
         Eigen::VectorXd x_diff = Eigen::VectorXd(numState);
-        
+
         for(int i=0 ; i< numSigmaPoints; i++)
         {
             x_diff = predictedSigmaPoints.col(i);
@@ -299,10 +303,10 @@ public:
                                                                 const void *args = NULL)
     {
         //extract sizes
-        const int numSigmaPoints = predictedSigmaPoints.cols();
+        const int numSigmaPoints(predictedSigmaPoints.cols());
 
         //create Predicted measurement matrix
-        Eigen::MatrixXd Zsig = Eigen::MatrixXd(meas_size, numSigmaPoints);
+        Eigen::MatrixXd Zsig(Eigen::MatrixXd(meas_size, numSigmaPoints));
 
         //create vectore measurement
         Eigen::VectorXd col(meas_size);
@@ -357,18 +361,18 @@ public:
                                                  std::function<Eigen::VectorXd(const Eigen::VectorXd&)>zfun)
     {
         //extract sizes
-        const int numSigmaPoints = xPredictedSigmaPoints.cols();
-        const int numState = mean.rows();
-        const int numMeas = zpred.rows();
+        const int numSigmaPoints(xPredictedSigmaPoints.cols());
+        const int numState(mean.rows());
+        const int numMeas(zpred.rows());
 
         // create matrix for cross correlation Tc
-        Eigen::MatrixXd Tc = Eigen::MatrixXd(numState, numMeas);
+        Eigen::MatrixXd Tc(Eigen::MatrixXd(numState, numMeas));
         Tc.fill(0.0);
-        
+
         // state difference
         Eigen::VectorXd x_diff = Eigen::VectorXd(numState);
         Eigen::VectorXd z_diff = Eigen::VectorXd(numMeas);
-        
+
         for(int i=0 ; i<numSigmaPoints; i++)
         {
             x_diff = xPredictedSigmaPoints.col(i) - mean;
@@ -395,8 +399,8 @@ public:
             Tc = Tc + weights(i) * x_diff * z_diff.transpose();
         }
         // Kalman gain K;
-        Eigen::MatrixXd K = Tc * S.inverse();
-        return K;        
+        Eigen::MatrixXd K(Tc * S.inverse());
+        return K;
     }
 
     /**
@@ -423,7 +427,7 @@ public:
     {
         // update state mean and covariance
         mean = mean + K * Innovation;
-        covariance = covariance - K * S * K.transpose();        
+        covariance = covariance - K * S * K.transpose();
     }
 };
 

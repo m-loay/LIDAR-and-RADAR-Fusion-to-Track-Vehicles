@@ -54,7 +54,7 @@ public:
                         std::function<Eigen::MatrixXd(const Eigen::Ref<const Eigen::VectorXd> &, const void *)>g_prime,
                         const void *p_args = NULL)
     {
-        
+
         x = g(x, p_args);
         Eigen::MatrixXd G = g_prime(x, p_args);
         P = (G* P * G.transpose()) + Q;
@@ -81,9 +81,9 @@ public:
                                                const Eigen::Ref<const Eigen::MatrixXd> &H,
                                                const Eigen::Ref<const Eigen::MatrixXd> &R)
     {
-        Eigen::MatrixXd Ht = H.transpose();
-        Eigen::MatrixXd S = (H * P * Ht) + R;
-        Eigen::MatrixXd K = P *Ht * S.inverse();
+        Eigen::MatrixXd Ht(H.transpose());
+        Eigen::MatrixXd S((H * P * Ht) + R);
+        Eigen::MatrixXd K(P *Ht * S.inverse());
         return K;
     }
 
@@ -114,7 +114,7 @@ public:
                        const Eigen::Ref<const Eigen::MatrixXd> &K)
     {
         x = x + (K * Y);
-        Eigen::MatrixXd I = Eigen::MatrixXd::Identity(x.size(), x.size());
+        Eigen::MatrixXd I(Eigen::MatrixXd::Identity(x.size(), x.size()));
         P = (I - K * H) * P;
     }
 

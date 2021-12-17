@@ -23,9 +23,9 @@
 class GroundTruthPackage
 {
 public:
-  long timestamp_;
+    long timestamp_;
 
-  Eigen::VectorXd gt_values_;
+    Eigen::VectorXd gt_values_;
 
 };
 
