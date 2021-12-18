@@ -148,7 +148,7 @@ bool linearFilter(void)
         bool r= true;
     for (unsigned int n = 0; n < measurement_pack_list.size(); ++n)
     {
-        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.01);
+        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.001);
         r = r && ((p_rest_list[n] - p_corr_list[n]).norm() < 0.001);
     }
     return r;
@@ -289,8 +289,8 @@ bool trackLinearFilter(void)
 
     for (unsigned int n = 0; n < measurement_pack_list.size()-1; ++n)
     {
-        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.01);
-        r = r && ((p_rest_list[n] - p_corr_list[n]).norm() < 0.01);
+        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.001);
+        r = r && ((p_rest_list[n] - p_corr_list[n]).norm() < 0.001);
     }
     return r;
 }
@@ -328,7 +328,7 @@ bool CalculateJacobian(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((H -Hj_corr).norm() < 0.01);
+    r = r && ((H -Hj_corr).norm() < 0.001);
 
     return r;
 }
@@ -494,8 +494,8 @@ bool trackEKF(void)
 
     for (unsigned int n = 0; n < measurement_pack_list.size()-1; ++n)
     {
-        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.01);
-        r = r && ((p_rest_list[n] - p_corr_list[n]).norm() < 0.01);
+        r = r && ((x_rest_list[n] - x_corr_list[n]).norm() < 0.001);
+        r = r && ((p_rest_list[n] - p_corr_list[n]).norm() < 0.001);
     }
     return r;
 }
@@ -550,7 +550,7 @@ bool calculateRMSE(void)
      *  Evaluation                                                    *
      *******************************************************************************/
         bool r= true;
-    r = r && ((rmse - rmse_correct).norm() < 0.01);
+    r = r && ((rmse - rmse_correct).norm() < 0.001);
 
     return r;
 }
@@ -606,7 +606,7 @@ bool CalculateSigmaPointsNoAugmentation(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((Xsig - sigmaPoints).norm() < 0.01);
+    r = r && ((Xsig - sigmaPoints).norm() < 0.001);
 
     return r;
 }
@@ -677,7 +677,7 @@ bool CalculateSigmaPointsWithAugmentation(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((Xsig - sigmaPoints).norm() < 0.01);
+    r = r && ((Xsig - sigmaPoints).norm() < 0.001);
 
     return r;
 }
@@ -733,7 +733,7 @@ bool CalculateSigmaPointsAugPred(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((Xsig_pred - pred_sig).norm() < 0.01);
+    r = r && ((Xsig_pred - pred_sig).norm() < 0.001);
 
     return r;
 }
@@ -798,8 +798,8 @@ bool CalculateSigmaPointsMeanCovar(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((x_corr - mean).norm() < 0.01);
-    r = r && ((p_corr - covariance).norm() < 0.01);
+    r = r && ((x_corr - mean).norm() < 0.001);
+    r = r && ((p_corr - covariance).norm() < 0.001);
 
     return r;
 }
@@ -881,8 +881,8 @@ bool PredictUT(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((x_corr - mean).norm() < 0.01);
-    r = r && ((p_corr - covariance).norm() < 0.01);
+    r = r && ((x_corr - mean).norm() < 0.001);
+    r = r && ((p_corr - covariance).norm() < 0.001);
     return r;
 }
 
@@ -961,8 +961,8 @@ bool CalculateMeasurementsMeanCovar(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((z_corr - zpred).norm() < 0.01);
-    r = r && ((s_corr - S).norm() < 0.01);
+    r = r && ((z_corr - zpred).norm() < 0.001);
+    r = r && ((s_corr - S).norm() < 0.001);
 
     return r;
 }
@@ -1063,8 +1063,8 @@ bool UpdateUT(void)
      *  Evaluation                                                    *
      *******************************************************************************/
     bool r= true;
-    r = r && ((x_corr - x).norm() < 0.01);
-    r = r && ((p_corr - P).norm() < 0.01);
+    r = r && ((x_corr - x).norm() < 0.001);
+    r = r && ((p_corr - P).norm() < 0.001);
 
     return r;
 }
