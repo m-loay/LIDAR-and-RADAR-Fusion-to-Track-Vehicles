@@ -18,8 +18,8 @@ set(TEST_CASES_INCLIDE_DIR ${CMAKE_SOURCE_DIR}/src/testCases)
 option (USE_TEST "Use Test Mode" OFF )
 option (USE_UNIT_TESTING "Use Unit testing Mode" OFF)
 option (USE_EKF "Use Extnded Kalman Filter APP" OFF)
-option (USE_UKF "Use Unscented Kalman Filter" ON)
-option (USE_HIGHWAY "Use High way Mode" ON)
+option (USE_UKF "Use Unscented Kalman Filter" OFF)
+option (USE_HIGHWAY "Use High way Mode" OFF)
 
 #find the pacakges required for eigen and save directory
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
@@ -27,7 +27,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 list(APPEND EXTRA_LIBS Eigen3::Eigen)
 
 if(USE_HIGHWAY)
-    find_package(PCL 1.10.1 REQUIRED)
+    find_package(PCL 1.10 REQUIRED)
     include_directories(${PCL_INCLUDE_DIRS})
     link_directories(${PCL_LIBRARY_DIRS})
     add_definitions(${PCL_DEFINITIONS})
@@ -53,6 +53,7 @@ include_directories ("${TEST_CASES_INCLIDE_DIR}")
 
 if(USE_HIGHWAY)
     #Add Highway sub-directory
+	message("Use HighWay")
     add_subdirectory(${HIGH_INCLIDE_DIR})
     list(APPEND EXTRA_LIBS highway)
     list(APPEND EXTRA_INCLUDES "${HIGH_INCLIDE_DIR}")
@@ -104,7 +105,6 @@ elseif (USE_TEST)
 	add_subdirectory(${PLOT_INCLIDE_DIR})
 	list(APPEND EXTRA_LIBS plotter)
 	list(APPEND EXTRA_INCLUDES "${PLOT_INCLIDE_DIR}")
-
 
     #compile the source code and link it with external libraries
     add_executable(kf src/main.cpp)

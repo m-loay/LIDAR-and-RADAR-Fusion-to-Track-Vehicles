@@ -81,7 +81,6 @@ void kfApp::ProcessMeasurement(const MeasurementPackage &measurement_pack)
     if (!is_initialized_)
     {
         kd_.x << 1, 1, 1, 1;
-        kd_.P = Eigen::MatrixXd::Identity(kd_.m_numState,kd_.m_numState);
         kd_.P(2,2) = 1000.0;
         kd_.P(3,3) = 1000.0;
 
@@ -103,7 +102,6 @@ void kfApp::ProcessMeasurement(const MeasurementPackage &measurement_pack)
         {
              kd_.x << measurement_pack.raw_measurements_(0),measurement_pack.raw_measurements_(1),0,0;
         }
-
 
         previous_timestamp_ = measurement_pack.timestamp_;
         is_initialized_ = true;

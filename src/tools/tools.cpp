@@ -109,7 +109,6 @@ Eigen::VectorXd Tools::CalculateRMSE(const std::vector<Eigen::VectorXd> &estimat
     //calculate the squared root
     rmse = rmse.array().sqrt();
 
-
     //return the result
     return rmse;
 }
