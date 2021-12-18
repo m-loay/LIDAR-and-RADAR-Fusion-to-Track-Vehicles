@@ -39,7 +39,7 @@ UKF::UKF(int num_states ,int aug_states)
     std_a_ = 0.5 * expected_a_max;  // m/s² acceleration noise
 
     // Process noise standard deviation yaw acceleration in rad/s^2
-    std_yawdd_ = M_PI_2; // ±22.5°/s²
+    std_yawdd_ = M_PI/2; // ±22.5°/s²
 
     //DO NOT MODIFY measurement noise values below these are provided by the sensor manufacturer.
     // Laser measurement noise standard deviation position1 in m
