@@ -140,7 +140,7 @@ void Tools::plotData(std::string type)
         y.at(k)  = estimate(1); // pos2 - est
         vx.at(k) = estimate(2); // vx - calculated from v & theta
         vy.at(k) = estimate(3); // vy - calculated from v & theta
-        v.at(k)  = sqrt(pow(vx.at(k),2)*pow(vy.at(k),2)); // v -est
+        v.at(k)  = sqrt(pow(vx.at(k),2)+pow(vy.at(k),2)); // v -est
 
         // 2.output the measurements
         if(measurement_pack_list[k].sensor_type_ == MeasurementPackage::LASER)
@@ -164,7 +164,7 @@ void Tools::plotData(std::string type)
         y_gt.at(k)  = gt(1);// pos2 - gt
         vx_gt.at(k) = gt(2);// vx - calculated from v & theta
         vy_gt.at(k) = gt(3);// vy - calculated from v & theta
-        v_gt.at(k)  = sqrt(pow(vx_gt.at(k),2)*pow(vy_gt.at(k),2));
+        v_gt.at(k)  = sqrt(pow(vx_gt.at(k),2)+pow(vy_gt.at(k),2));
 
         // 4.output the ground truth packages
         time.at(k) = k;
