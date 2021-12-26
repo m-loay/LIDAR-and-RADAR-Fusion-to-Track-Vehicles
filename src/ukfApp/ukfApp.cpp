@@ -95,8 +95,6 @@ void ukfApp::ProcessMeasurement(const MeasurementPackage &meas_package)
 
             float px = rho * cos(phi);
             float py = rho * sin(phi);
-            float vx = rhodot * cos(phi);
-            float vy = rhodot * sin(phi);
 
             kd_.x << px,py,0,0,0;
         }
